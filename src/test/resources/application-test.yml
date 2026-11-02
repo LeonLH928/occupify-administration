@@ -6,17 +6,21 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     show-sql: false
   flyway:
-    enabled: true
-    locations: classpath:db/migration
+    enabled: false
   rabbitmq:
     listener:
       simple:
         auto-startup: false
 
 app:
+  auth:
+    dev-mock:
+      enabled: true
+      admin-id: 99999999-0000-1111-2222-333333333333
+      admin-email: admin@occupify.app
   rabbitmq:
     project-exchange: occupify.project.exchange
     project-queue: occupify.administration.project.queue
