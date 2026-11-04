@@ -30,8 +30,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Contract {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @Column(name = "job_id", nullable = false)
   private UUID jobId;

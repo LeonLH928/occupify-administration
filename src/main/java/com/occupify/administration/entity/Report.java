@@ -31,8 +31,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Report {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "reporter_user_id", nullable = false)

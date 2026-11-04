@@ -93,7 +93,8 @@ public class UserEventListener {
         try {
           yield UserStatus.valueOf(normalized);
         } catch (IllegalArgumentException e) {
-          log.warn("[Admin Event Listener] Unknown user status [{}], defaulting to ACTIVE", statusStr);
+          log.warn(
+              "[Admin Event Listener] Unknown user status [{}], defaulting to ACTIVE", statusStr);
           yield UserStatus.ACTIVE;
         }
       }

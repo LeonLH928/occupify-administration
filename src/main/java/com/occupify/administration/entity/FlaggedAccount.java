@@ -29,8 +29,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FlaggedAccount {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "user_id", nullable = false)

@@ -28,8 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Project {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "employer_id", nullable = false)

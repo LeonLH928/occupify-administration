@@ -51,18 +51,49 @@ class ContractEventListenerTest {
   @Test
   @DisplayName("Should update contract to IN_PROGRESS and log CONTRACT_ACCEPTED audit entry")
   void handleContractAccepted_UpdatesStatusAndLogsAudit() {
-    User employer = User.builder().id(employerId).email("emp@occupify.local").fullName("Employer").role(UserRole.USER).status(UserStatus.ACTIVE).build();
-    User freelancer = User.builder().id(freelancerId).email("free@occupify.local").fullName("Freelancer").role(UserRole.USER).status(UserStatus.ACTIVE).build();
-    Contract contract = Contract.builder().id(contractId).jobId(jobId).employer(employer).employee(freelancer).status(ContractStatus.IN_PROGRESS).salaryType(SalaryType.FIXED).build();
+    User employer =
+        User.builder()
+            .id(employerId)
+            .email("emp@occupify.local")
+            .fullName("Employer")
+            .role(UserRole.USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+    User freelancer =
+        User.builder()
+            .id(freelancerId)
+            .email("free@occupify.local")
+            .fullName("Freelancer")
+            .role(UserRole.USER)
+            .status(UserStatus.ACTIVE)
+            .build();
+    Contract contract =
+        Contract.builder()
+            .id(contractId)
+            .jobId(jobId)
+            .employer(employer)
+            .employee(freelancer)
+            .status(ContractStatus.IN_PROGRESS)
+            .salaryType(SalaryType.FIXED)
+            .build();
 
     when(contractRepository.findById(contractId)).thenReturn(Optional.of(contract));
     when(userRepository.findById(freelancerId)).thenReturn(Optional.of(freelancer));
 
     ContractAcceptedEvent event =
         new ContractAcceptedEvent(
-            UUID.randomUUID(), contractId, jobId, UUID.randomUUID(),
-            employerId, freelancerId, "Job Title", new BigDecimal("500.00"),
-            "FIXED", LocalDate.now(), LocalDate.now().plusDays(10), LocalDateTime.now());
+            UUID.randomUUID(),
+            contractId,
+            jobId,
+            UUID.randomUUID(),
+            employerId,
+            freelancerId,
+            "Job Title",
+            new BigDecimal("500.00"),
+            "FIXED",
+            LocalDate.now(),
+            LocalDate.now().plusDays(10),
+            LocalDateTime.now());
 
     contractEventListener.handleContractAccepted(event);
 
@@ -83,13 +114,20 @@ class ContractEventListenerTest {
   @Test
   @DisplayName("Should mark contract as CANCELLED and log CONTRACT_REJECTED audit entry")
   void handleContractRejected_MarksCancelledAndLogsAudit() {
-    Contract contract = Contract.builder().id(contractId).jobId(jobId).status(ContractStatus.IN_PROGRESS).build();
+    Contract contract =
+        Contract.builder().id(contractId).jobId(jobId).status(ContractStatus.IN_PROGRESS).build();
     when(contractRepository.findById(contractId)).thenReturn(Optional.of(contract));
     when(userRepository.findById(freelancerId)).thenReturn(Optional.empty());
 
     ContractRejectedEvent event =
         new ContractRejectedEvent(
-            UUID.randomUUID(), contractId, jobId, employerId, freelancerId, "Not suitable", LocalDateTime.now());
+            UUID.randomUUID(),
+            contractId,
+            jobId,
+            employerId,
+            freelancerId,
+            "Not suitable",
+            LocalDateTime.now());
 
     contractEventListener.handleContractRejected(event);
 
@@ -108,12 +146,18 @@ class ContractEventListenerTest {
   @Test
   @DisplayName("Should cancel contract and log CONTRACT_COMPENSATION_EXECUTED audit entry")
   void handleContractCompensation_RevertsToPendingAndLogsFailure() {
-    Contract contract = Contract.builder().id(contractId).jobId(jobId).status(ContractStatus.IN_PROGRESS).build();
+    Contract contract =
+        Contract.builder().id(contractId).jobId(jobId).status(ContractStatus.IN_PROGRESS).build();
     when(contractRepository.findById(contractId)).thenReturn(Optional.of(contract));
 
     ContractCompensationRequestedEvent event =
         new ContractCompensationRequestedEvent(
-            UUID.randomUUID(), contractId, "occupify-payment", "INSUFFICIENT_FUNDS", "Payment failed", LocalDateTime.now());
+            UUID.randomUUID(),
+            contractId,
+            "occupify-payment",
+            "INSUFFICIENT_FUNDS",
+            "Payment failed",
+            LocalDateTime.now());
 
     contractEventListener.handleContractCompensation(event);
 
@@ -131,7 +175,8 @@ class ContractEventListenerTest {
   }
 
   @Test
-  @DisplayName("Should not synchronize contract replica or audit log on ContractCreatedEvent (deferred until acceptance)")
+  @DisplayName(
+      "Should not synchronize contract replica or audit log on ContractCreatedEvent (deferred until acceptance)")
   void handleContractCreated_DefersSynchronization() {
     com.occupify.administration.event.ContractCreatedEvent event =
         new com.occupify.administration.event.ContractCreatedEvent(
