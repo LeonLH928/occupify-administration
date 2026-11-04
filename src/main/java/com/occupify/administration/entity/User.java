@@ -26,8 +26,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @Column(nullable = false, unique = true)
   private String email;

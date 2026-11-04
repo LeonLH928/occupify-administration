@@ -87,23 +87,35 @@ public class RabbitMQConfig {
   }
 
   @Bean
-  public Binding adminContractCreatedBinding(Queue adminContractQueue, TopicExchange contractExchange) {
-    return BindingBuilder.bind(adminContractQueue).to(contractExchange).with(contractCreatedRoutingKey);
+  public Binding adminContractCreatedBinding(
+      Queue adminContractQueue, TopicExchange contractExchange) {
+    return BindingBuilder.bind(adminContractQueue)
+        .to(contractExchange)
+        .with(contractCreatedRoutingKey);
   }
 
   @Bean
-  public Binding adminContractAcceptedBinding(Queue adminContractQueue, TopicExchange contractExchange) {
-    return BindingBuilder.bind(adminContractQueue).to(contractExchange).with(contractAcceptedRoutingKey);
+  public Binding adminContractAcceptedBinding(
+      Queue adminContractQueue, TopicExchange contractExchange) {
+    return BindingBuilder.bind(adminContractQueue)
+        .to(contractExchange)
+        .with(contractAcceptedRoutingKey);
   }
 
   @Bean
-  public Binding adminContractRejectedBinding(Queue adminContractQueue, TopicExchange contractExchange) {
-    return BindingBuilder.bind(adminContractQueue).to(contractExchange).with(contractRejectedRoutingKey);
+  public Binding adminContractRejectedBinding(
+      Queue adminContractQueue, TopicExchange contractExchange) {
+    return BindingBuilder.bind(adminContractQueue)
+        .to(contractExchange)
+        .with(contractRejectedRoutingKey);
   }
 
   @Bean
-  public Binding adminContractCompensationBinding(Queue adminContractQueue, TopicExchange contractExchange) {
-    return BindingBuilder.bind(adminContractQueue).to(contractExchange).with(contractCompensationRoutingKey);
+  public Binding adminContractCompensationBinding(
+      Queue adminContractQueue, TopicExchange contractExchange) {
+    return BindingBuilder.bind(adminContractQueue)
+        .to(contractExchange)
+        .with(contractCompensationRoutingKey);
   }
 
   @Bean
@@ -120,8 +132,11 @@ public class RabbitMQConfig {
   }
 
   @Bean
-  public Binding adminProjectCreatedBinding(Queue adminProjectQueue, TopicExchange projectExchange) {
-    return BindingBuilder.bind(adminProjectQueue).to(projectExchange).with(projectCreatedRoutingKey);
+  public Binding adminProjectCreatedBinding(
+      Queue adminProjectQueue, TopicExchange projectExchange) {
+    return BindingBuilder.bind(adminProjectQueue)
+        .to(projectExchange)
+        .with(projectCreatedRoutingKey);
   }
 
   @Bean
@@ -159,16 +174,15 @@ public class RabbitMQConfig {
 
   @Bean
   public Binding adminUserBinding(Queue adminUserQueue, TopicExchange userExchange) {
-    return BindingBuilder.bind(adminUserQueue)
-        .to(userExchange)
-        .with(userActivatedRoutingKey);
+    return BindingBuilder.bind(adminUserQueue).to(userExchange).with(userActivatedRoutingKey);
   }
 
   @Bean
   public MessageConverter jackson2JsonMessageConverter() {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
-    objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    objectMapper.configure(
+        com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter(objectMapper);
 
     DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
@@ -176,10 +190,8 @@ public class RabbitMQConfig {
     typeMapper.setTrustedPackages("*");
 
     Map<String, Class<?>> idClassMapping = new HashMap<>();
-    idClassMapping.put(
-        "com.occupify.identity.event.UserActivatedEvent", UserActivatedEvent.class);
-    idClassMapping.put(
-        "com.occupify.payment.event.UserActivatedEvent", UserActivatedEvent.class);
+    idClassMapping.put("com.occupify.identity.event.UserActivatedEvent", UserActivatedEvent.class);
+    idClassMapping.put("com.occupify.payment.event.UserActivatedEvent", UserActivatedEvent.class);
     idClassMapping.put(
         "com.occupify.administration.event.UserActivatedEvent", UserActivatedEvent.class);
     idClassMapping.put(
@@ -187,27 +199,39 @@ public class RabbitMQConfig {
     idClassMapping.put("UserActivatedEvent", UserActivatedEvent.class);
 
     idClassMapping.put("com.occupify.core.event.ContractCreatedEvent", ContractCreatedEvent.class);
-    idClassMapping.put("com.occupify.administration.event.ContractCreatedEvent", ContractCreatedEvent.class);
+    idClassMapping.put(
+        "com.occupify.administration.event.ContractCreatedEvent", ContractCreatedEvent.class);
     idClassMapping.put("ContractCreatedEvent", ContractCreatedEvent.class);
 
-    idClassMapping.put("com.occupify.core.event.ContractAcceptedEvent", ContractAcceptedEvent.class);
-    idClassMapping.put("com.occupify.administration.event.ContractAcceptedEvent", ContractAcceptedEvent.class);
+    idClassMapping.put(
+        "com.occupify.core.event.ContractAcceptedEvent", ContractAcceptedEvent.class);
+    idClassMapping.put(
+        "com.occupify.administration.event.ContractAcceptedEvent", ContractAcceptedEvent.class);
     idClassMapping.put("ContractAcceptedEvent", ContractAcceptedEvent.class);
 
-    idClassMapping.put("com.occupify.core.event.ContractRejectedEvent", ContractRejectedEvent.class);
-    idClassMapping.put("com.occupify.administration.event.ContractRejectedEvent", ContractRejectedEvent.class);
+    idClassMapping.put(
+        "com.occupify.core.event.ContractRejectedEvent", ContractRejectedEvent.class);
+    idClassMapping.put(
+        "com.occupify.administration.event.ContractRejectedEvent", ContractRejectedEvent.class);
     idClassMapping.put("ContractRejectedEvent", ContractRejectedEvent.class);
 
-    idClassMapping.put("com.occupify.core.event.ContractCompensationRequestedEvent", ContractCompensationRequestedEvent.class);
-    idClassMapping.put("com.occupify.administration.event.ContractCompensationRequestedEvent", ContractCompensationRequestedEvent.class);
-    idClassMapping.put("ContractCompensationRequestedEvent", ContractCompensationRequestedEvent.class);
+    idClassMapping.put(
+        "com.occupify.core.event.ContractCompensationRequestedEvent",
+        ContractCompensationRequestedEvent.class);
+    idClassMapping.put(
+        "com.occupify.administration.event.ContractCompensationRequestedEvent",
+        ContractCompensationRequestedEvent.class);
+    idClassMapping.put(
+        "ContractCompensationRequestedEvent", ContractCompensationRequestedEvent.class);
 
     idClassMapping.put("com.occupify.core.event.ProjectCreatedEvent", ProjectCreatedEvent.class);
-    idClassMapping.put("com.occupify.administration.event.ProjectCreatedEvent", ProjectCreatedEvent.class);
+    idClassMapping.put(
+        "com.occupify.administration.event.ProjectCreatedEvent", ProjectCreatedEvent.class);
     idClassMapping.put("ProjectCreatedEvent", ProjectCreatedEvent.class);
 
     idClassMapping.put("com.occupify.core.event.ProjectClosedEvent", ProjectClosedEvent.class);
-    idClassMapping.put("com.occupify.administration.event.ProjectClosedEvent", ProjectClosedEvent.class);
+    idClassMapping.put(
+        "com.occupify.administration.event.ProjectClosedEvent", ProjectClosedEvent.class);
     idClassMapping.put("ProjectClosedEvent", ProjectClosedEvent.class);
 
     typeMapper.setIdClassMapping(idClassMapping);

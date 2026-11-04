@@ -100,8 +100,10 @@ class UserEventListenerTest {
   @DisplayName("Should ignore invalid or null event without throwing exception")
   void shouldIgnoreInvalidEvent() {
     listener.handleUserActivated(null);
-    listener.handleUserActivated(new UserActivatedEvent(null, "test@occupify.com", "Test", "USER", "ACTIVE", Instant.now()));
-    listener.handleUserActivated(new UserActivatedEvent(UUID.randomUUID(), "", "Test", "USER", "ACTIVE", Instant.now()));
+    listener.handleUserActivated(
+        new UserActivatedEvent(null, "test@occupify.com", "Test", "USER", "ACTIVE", Instant.now()));
+    listener.handleUserActivated(
+        new UserActivatedEvent(UUID.randomUUID(), "", "Test", "USER", "ACTIVE", Instant.now()));
 
     verify(userRepository, never()).save(any());
   }

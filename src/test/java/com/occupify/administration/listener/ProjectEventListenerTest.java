@@ -102,8 +102,7 @@ class ProjectEventListenerTest {
     UUID employerId = UUID.randomUUID();
 
     when(userRepository.findById(employerId)).thenReturn(Optional.empty());
-    when(userRepository.save(any(User.class)))
-        .thenAnswer(invocation -> invocation.getArgument(0));
+    when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
     when(projectRepository.findById(projectId)).thenReturn(Optional.empty());
 
     ProjectCreatedEvent event =
@@ -135,8 +134,12 @@ class ProjectEventListenerTest {
   @DisplayName("Should gracefully skip invalid or null ProjectCreatedEvent")
   void handleProjectCreated_whenInvalidEvent_skipsProcessing() {
     listener.handleProjectCreated(null);
-    listener.handleProjectCreated(new ProjectCreatedEvent(null, "Title", "Desc", "OPEN", UUID.randomUUID(), "e@x.com", Instant.now()));
-    listener.handleProjectCreated(new ProjectCreatedEvent(UUID.randomUUID(), "Title", "Desc", "OPEN", null, "e@x.com", Instant.now()));
+    listener.handleProjectCreated(
+        new ProjectCreatedEvent(
+            null, "Title", "Desc", "OPEN", UUID.randomUUID(), "e@x.com", Instant.now()));
+    listener.handleProjectCreated(
+        new ProjectCreatedEvent(
+            UUID.randomUUID(), "Title", "Desc", "OPEN", null, "e@x.com", Instant.now()));
 
     verifyNoInteractions(projectRepository);
     verifyNoInteractions(userRepository);
@@ -199,7 +202,13 @@ class ProjectEventListenerTest {
     listener.handleProjectClosed(null);
     listener.handleProjectClosed(
         new ProjectClosedEvent(
-            null, "Title", UUID.randomUUID(), "e@x.com", UUID.randomUUID(), "EMPLOYER", Instant.now()));
+            null,
+            "Title",
+            UUID.randomUUID(),
+            "e@x.com",
+            UUID.randomUUID(),
+            "EMPLOYER",
+            Instant.now()));
 
     verifyNoInteractions(projectRepository);
     verifyNoInteractions(auditLogRepository);

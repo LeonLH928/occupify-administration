@@ -26,8 +26,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CancellationContract {
 
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "contract_id", nullable = false)
