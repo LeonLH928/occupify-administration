@@ -176,7 +176,9 @@ public class ContractEventListener {
       log.warn("[Admin Contract Listener] Received invalid ContractCompletedEvent");
       return;
     }
-    log.info("[Admin Contract Listener] Handling ContractCompletedEvent for contractId: {}", event.contractId());
+    log.info(
+        "[Admin Contract Listener] Handling ContractCompletedEvent for contractId: {}",
+        event.contractId());
 
     contractRepository
         .findById(event.contractId())
@@ -206,7 +208,9 @@ public class ContractEventListener {
             .build();
     auditLogRepository.save(auditLog);
 
-    log.info("[Admin Contract Listener] Recorded CONTRACT_COMPLETED audit log for contract [{}]", event.contractId());
+    log.info(
+        "[Admin Contract Listener] Recorded CONTRACT_COMPLETED audit log for contract [{}]",
+        event.contractId());
   }
 
   @Transactional
@@ -216,8 +220,10 @@ public class ContractEventListener {
       log.warn("[Admin Contract Listener] Received invalid ContractCancelledEvent");
       return;
     }
-    log.info("[Admin Contract Listener] Handling ContractCancelledEvent for contractId: {}, reason: {}",
-        event.contractId(), event.reason());
+    log.info(
+        "[Admin Contract Listener] Handling ContractCancelledEvent for contractId: {}, reason: {}",
+        event.contractId(),
+        event.reason());
 
     contractRepository
         .findById(event.contractId())
@@ -233,9 +239,10 @@ public class ContractEventListener {
             ? userRepository.findById(event.cancelledByUserId()).orElse(null)
             : null;
 
-    ActorRole actorRole = "EMPLOYER".equalsIgnoreCase(event.cancelledByRole())
-        ? ActorRole.EMPLOYER
-        : ActorRole.EMPLOYEE;
+    ActorRole actorRole =
+        "EMPLOYER".equalsIgnoreCase(event.cancelledByRole())
+            ? ActorRole.EMPLOYER
+            : ActorRole.EMPLOYEE;
 
     SystemAuditLog auditLog =
         SystemAuditLog.builder()
@@ -251,7 +258,9 @@ public class ContractEventListener {
             .build();
     auditLogRepository.save(auditLog);
 
-    log.info("[Admin Contract Listener] Recorded CONTRACT_CANCELLED audit log for contract [{}]", event.contractId());
+    log.info(
+        "[Admin Contract Listener] Recorded CONTRACT_CANCELLED audit log for contract [{}]",
+        event.contractId());
   }
 
   @Transactional
@@ -261,8 +270,10 @@ public class ContractEventListener {
       log.warn("[Admin Contract Listener] Received invalid ReviewCreatedEvent");
       return;
     }
-    log.info("[Admin Contract Listener] Handling ReviewCreatedEvent for reviewId: {}, contractId: {}",
-        event.reviewId(), event.contractId());
+    log.info(
+        "[Admin Contract Listener] Handling ReviewCreatedEvent for reviewId: {}, contractId: {}",
+        event.reviewId(),
+        event.contractId());
 
     User actor =
         event.reviewerId() != null
@@ -271,7 +282,8 @@ public class ContractEventListener {
 
     ActorRole actorRole = ActorRole.EMPLOYEE;
     Optional<Contract> contractOpt = contractRepository.findById(event.contractId());
-    if (contractOpt.isPresent() && contractOpt.get().getEmployer() != null
+    if (contractOpt.isPresent()
+        && contractOpt.get().getEmployer() != null
         && contractOpt.get().getEmployer().getId().equals(event.reviewerId())) {
       actorRole = ActorRole.EMPLOYER;
     }
@@ -290,7 +302,9 @@ public class ContractEventListener {
             .build();
     auditLogRepository.save(auditLog);
 
-    log.info("[Admin Contract Listener] Recorded REVIEW_CREATED audit log for review [{}]", event.reviewId());
+    log.info(
+        "[Admin Contract Listener] Recorded REVIEW_CREATED audit log for review [{}]",
+        event.reviewId());
   }
 
   private Contract getOrCreateContract(ContractAcceptedEvent event) {

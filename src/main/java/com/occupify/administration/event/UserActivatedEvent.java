@@ -5,12 +5,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record UserActivatedEvent(
-    UUID userId,
-    String email,
-    String fullName,
-    String role,
-    String status,
-    Instant occurredAt)
+    UUID userId, String email, String fullName, String role, String status, Instant occurredAt)
     implements Serializable {
 
   public UserActivatedEvent {

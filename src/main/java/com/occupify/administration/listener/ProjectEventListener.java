@@ -15,7 +15,6 @@ import com.occupify.administration.repository.ProjectRepository;
 import com.occupify.administration.repository.SystemAuditLogRepository;
 import com.occupify.administration.repository.UserRepository;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -78,12 +77,12 @@ public class ProjectEventListener {
             .orElseGet(() -> Project.builder().id(event.projectId()).build());
 
     project.setEmployer(employer);
-    project.setTitle(StringUtils.hasText(event.title()) ? event.title().trim() : "Untitled Project");
+    project.setTitle(
+        StringUtils.hasText(event.title()) ? event.title().trim() : "Untitled Project");
     project.setDescription(event.description());
     project.setStatus(parseProjectStatus(event.status()));
 
-    Instant createdInstant =
-        event.createdAt() != null ? event.createdAt() : Instant.now();
+    Instant createdInstant = event.createdAt() != null ? event.createdAt() : Instant.now();
     project.setCreatedAt(createdInstant);
 
     projectRepository.save(project);
@@ -116,15 +115,15 @@ public class ProjectEventListener {
     }
 
     log.info(
-        "[Admin Project Listener] Processing ProjectClosedEvent for project [{}]", event.projectId());
+        "[Admin Project Listener] Processing ProjectClosedEvent for project [{}]",
+        event.projectId());
 
     projectRepository
         .findById(event.projectId())
         .ifPresent(
             project -> {
               project.setStatus(ProjectStatus.CLOSED);
-              Instant closedInstant =
-                  event.closedAt() != null ? event.closedAt() : Instant.now();
+              Instant closedInstant = event.closedAt() != null ? event.closedAt() : Instant.now();
               project.setClosedAt(closedInstant);
               projectRepository.save(project);
 
@@ -160,7 +159,8 @@ public class ProjectEventListener {
     try {
       return ProjectStatus.valueOf(statusStr.trim().toUpperCase());
     } catch (IllegalArgumentException e) {
-      log.warn("[Admin Project Listener] Unknown project status [{}], defaulting to OPEN", statusStr);
+      log.warn(
+          "[Admin Project Listener] Unknown project status [{}], defaulting to OPEN", statusStr);
       return ProjectStatus.OPEN;
     }
   }
